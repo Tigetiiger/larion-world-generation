@@ -5,15 +5,14 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
-import net.minecraft.world.level.levelgen.DensityFunctions;
 
 public record Division(DensityFunction argument1, DensityFunction argument2) implements DensityFunction {
 
     private static final MapCodec<Division> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
-            .group(DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument1").forGetter(Division::argument1),
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument2").forGetter(Division::argument2))
+            .group(DensityFunction.CODEC.fieldOf("argument1").forGetter(Division::argument1),
+                    DensityFunction.CODEC.fieldOf("argument2").forGetter(Division::argument2))
             .apply(instance, (Division::new)));
-    public static final KeyDispatchDataCodec<Division> CODEC = DensityFunctions.makeCodec(MAP_CODEC);
+    public static final KeyDispatchDataCodec<Division> CODEC = KeyDispatchDataCodec.of(MAP_CODEC);
 
     @Override
     public double compute(FunctionContext context) {
@@ -35,8 +34,8 @@ public record Division(DensityFunction argument1, DensityFunction argument2) imp
     }
 
     @Override
-    public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(new Division(this.argument1.mapAll(visitor), this.argument2.mapAll(visitor)));
+    public DensityFunction mapChildren(Visitor visitor) {
+        return new Division(visitor.apply(this.argument1), visitor.apply(this.argument2));
     }
 
     @Override

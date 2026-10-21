@@ -1,6 +1,23 @@
+> [!WARNING]
+> **Disclaimer:** This is an unofficial fork of [Larion World Generation](https://github.com/ViciousBadger/larion-world-generation) by Badgerson, ported to Minecraft 26.2 with AI. The port's code, data and build changes were made by an AI assistant (Claude) and tested automatically, not written by hand. It is not made or endorsed by the original author. Please report problems with this port here, not on the original project.
+
 ![Larion project logo](images/larion_logo.png)
 
-# Larion World Generation, for Minecraft 1.20-1.21.1
+# Larion World Generation — unofficial port for Minecraft 26.2
+
+## About this port
+
+- **Based on:** upstream `main` (Larion 4.3.1, unreleased upstream), not the 4.3.0 release on Modrinth.
+- **Loader:** Fabric only. Needs Fabric Loader; Fabric API is *not* required.
+- **Server-side only** on multiplayer servers: players can join without installing it. Singleplayer needs it installed on the client.
+- **Same terrain as on 1.21.1:** the same seed produces the same landscape as Larion 4.3.1 on 1.21.1 (checked automatically by comparing generated worlds column by column). New vanilla content (sulfur caves, pale garden, new features) is included.
+- **World type:** use **Default**. Large Biomes and Amplified are not supported.
+- **Not available on 26.2:** Noisium, Faster Random and World Preview (recommended below) have no 26.2 versions. The Disc World add-on has not been ported.
+- Porting notes and plan: [PORTING-26.2.md](PORTING-26.2.md).
+
+The original README follows.
+
+---
 
 Larion is a terrain generation mod that overhauls the style and layout of world generation in a modern-vanilla-like "epic fantasy" style favoring otherworldly, dreamlike vistas.
 

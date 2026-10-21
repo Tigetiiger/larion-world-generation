@@ -9,9 +9,9 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 public record Sqrt(DensityFunction df) implements DensityFunctions.PureTransformer{
 
     private static final MapCodec<Sqrt> MAP_CODEC = RecordCodecBuilder.mapCodec(
-            (instance) -> instance.group(DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument").forGetter(Sqrt::df))
+            (instance) -> instance.group(DensityFunction.CODEC.fieldOf("argument").forGetter(Sqrt::df))
                     .apply(instance, (Sqrt::new)));
-    public static final KeyDispatchDataCodec<Sqrt> CODEC = DensityFunctions.makeCodec(MAP_CODEC);
+    public static final KeyDispatchDataCodec<Sqrt> CODEC = KeyDispatchDataCodec.of(MAP_CODEC);
 
     @Override
     public DensityFunction input() {
@@ -27,8 +27,8 @@ public record Sqrt(DensityFunction df) implements DensityFunctions.PureTransform
     }
 
     @Override
-    public DensityFunction mapAll(Visitor visitor) {
-        return new Sqrt(this.df.mapAll(visitor));
+    public DensityFunction mapChildren(Visitor visitor) {
+        return new Sqrt(visitor.apply(this.df));
     }
 
     @Override

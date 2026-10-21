@@ -9,8 +9,8 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 
 public record Sine(DensityFunction df) implements DensityFunctions.PureTransformer {
 
-    private static final MapCodec<Sine> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument").forGetter(Sine::df)).apply(instance, (Sine::new)));
-    public static final KeyDispatchDataCodec<Sine> CODEC  = DensityFunctions.makeCodec(MAP_CODEC);
+    private static final MapCodec<Sine> MAP_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(DensityFunction.CODEC.fieldOf("argument").forGetter(Sine::df)).apply(instance, (Sine::new)));
+    public static final KeyDispatchDataCodec<Sine> CODEC  = KeyDispatchDataCodec.of(MAP_CODEC);
 
     @Override
     public DensityFunction input() {
@@ -23,8 +23,8 @@ public record Sine(DensityFunction df) implements DensityFunctions.PureTransform
     }
 
     @Override
-    public DensityFunction mapAll(Visitor visitor) {
-        return new Sine(this.df.mapAll(visitor));
+    public DensityFunction mapChildren(Visitor visitor) {
+        return new Sine(visitor.apply(this.df));
     }
 
     @Override
