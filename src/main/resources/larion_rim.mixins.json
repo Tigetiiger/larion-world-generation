@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.tigetiiger.larionrim.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "MinecraftServerMixin",
+    "NoiseChunkMixin",
+    "ChunkGeneratorMixin",
+    "WorldCarverMixin",
+    "AquiferMixin",
+    "NoiseGeneratorSettingsMixin",
+    "NoiseBasedChunkGeneratorMixin",
+    "SpringFeatureMixin",
+    "PortalForcerMixin",
+    "SurfaceSystemMixin",
+    "LakeFeatureMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

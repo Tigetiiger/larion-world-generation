@@ -1,0 +1,70 @@
+{
+  "note": "Larion: Rimworld - ocean ring with small islets inside the wall, land climate beyond it.",
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:cache_2d",
+    "argument": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:add",
+        "argument1": "larion:overworld/continents",
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": {
+            "type": "larion_rim:ring_blend",
+            "from": -300,
+            "to": 0,
+            "relative_to": "ring"
+          },
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": -0.45,
+            "argument2": {
+              "type": "minecraft:mul",
+              "argument1": -0.5,
+              "argument2": "larion:overworld/continents"
+            }
+          }
+        }
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": {
+          "type": "larion_rim:ring_blend",
+          "from": 16,
+          "to": 40
+        },
+        "argument2": {
+          "type": "minecraft:add",
+          "argument1": 0.35,
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": -1,
+            "argument2": {
+              "type": "minecraft:add",
+              "argument1": "larion:overworld/continents",
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": {
+                  "type": "larion_rim:ring_blend",
+                  "from": -300,
+                  "to": 0,
+                  "relative_to": "ring"
+                },
+                "argument2": {
+                  "type": "minecraft:add",
+                  "argument1": -0.45,
+                  "argument2": {
+                    "type": "minecraft:mul",
+                    "argument1": -0.5,
+                    "argument2": "larion:overworld/continents"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

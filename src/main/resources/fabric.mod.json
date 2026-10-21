@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "larion_rim",
+  "version": "${version}",
+  "name": "Larion: Rimworld",
+  "description": "Larion add-on: the world is a disc that ends in an ocean ring, a climate-themed wall and the void, with sparse floating islands beyond. Unofficial, AI-assisted.",
+  "authors": [
+    "Tigetiiger"
+  ],
+  "contact": {
+    "sources": "https://github.com/Tigetiiger/larion-world-generation/tree/rimworld-26.2"
+  },
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.tigetiiger.larionrim.LarionRim"
+    ],
+    "modmenu": [
+      "dev.tigetiiger.larionrim.client.RimModMenu"
+    ]
+  },
+  "mixins": [
+    "larion_rim.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.20.0",
+    "fabric-api": "*",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "larion": ">=4.3.1"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+  "accessWidener": "larion_rim.accesswidener"
+}

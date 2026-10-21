@@ -1,0 +1,52 @@
+{
+  "note": "Larion: Rimworld - Larion terrain inside the disc; wall, overhang, void and sky islands at the edge. Built from vanilla min/max/range_choice so worldgen optimizers can still compile Larion's part.",
+  "type": "minecraft:range_choice",
+  "input": {
+    "type": "larion_rim:edge_part",
+    "part": "rel",
+    "noise": "larion_rim:edge"
+  },
+  "min_inclusive": -1000000.0,
+  "max_exclusive": -300.0,
+  "when_in_range": "larion_rim:larion/final_density",
+  "when_out_of_range": {
+    "type": "minecraft:range_choice",
+    "input": {
+      "type": "larion_rim:edge_part",
+      "part": "rel",
+      "noise": "larion_rim:edge"
+    },
+    "min_inclusive": 16.0,
+    "max_exclusive": 1000000.0,
+    "when_in_range": {
+      "type": "larion_rim:edge_part",
+      "part": "islands",
+      "noise": "larion_rim:edge"
+    },
+    "when_out_of_range": {
+      "type": "minecraft:min",
+      "argument1": {
+        "type": "minecraft:max",
+        "argument1": {
+          "type": "minecraft:min",
+          "argument1": "larion_rim:larion/final_density",
+          "argument2": {
+            "type": "larion_rim:edge_part",
+            "part": "cap",
+            "noise": "larion_rim:edge"
+          }
+        },
+        "argument2": {
+          "type": "larion_rim:edge_part",
+          "part": "raise",
+          "noise": "larion_rim:edge"
+        }
+      },
+      "argument2": {
+        "type": "larion_rim:edge_part",
+        "part": "cut",
+        "noise": "larion_rim:edge"
+      }
+    }
+  }
+}

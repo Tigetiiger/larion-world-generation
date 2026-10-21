@@ -1,0 +1,18 @@
+{
+  "note": "Larion: Rimworld - surface depth beyond the wall so sky islands get surface biomes.",
+  "type": "minecraft:add",
+  "argument1": "larion_rim:larion/depth",
+  "argument2": {
+    "type": "minecraft:mul",
+    "argument1": {
+      "type": "larion_rim:ring_blend",
+      "from": 16,
+      "to": 40
+    },
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": -1,
+      "argument2": "larion_rim:larion/depth"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "note": "Larion: Rimworld - frozen at the north wall, hot at the south wall (sine peaks at 75% of the radius).",
+  "type": "minecraft:clamp",
+  "input": {
+    "type": "minecraft:mul",
+    "argument1": {
+      "type": "larion_rim:coord_norm",
+      "axis": "z"
+    },
+    "argument2": 2.0944
+  },
+  "min": -1.5708,
+  "max": 1.5708
+}
