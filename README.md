@@ -1,7 +1,7 @@
 > [!WARNING]
 > **Disclaimer:** This is an unofficial fork of [Larion: Disc World](https://github.com/ViciousBadger/larion-disc-world) by Badgerson, ported to Minecraft 26.2 with AI. The port's changes were made by an AI assistant (Claude) and tested automatically, not written by hand. It is not made or endorsed by the original author. It is meant to be used with the unofficial [Larion 26.2 port](https://github.com/Tigetiiger/larion-world-generation) (Fabric, Larion 4.3.1).
 >
-> 26.2 changes: `pack.mcmeta` updated to the new pack format (107), and the Fabric mod version no longer requires Fabric API. The worldgen data is unchanged.
+> 26.2 changes: `pack.mcmeta` updated to the new pack format (107); the Fabric mod version now requires Minecraft 26.2 and Larion 4.3.1+ (and still Fabric API). The worldgen data is unchanged.
 
 This is a simple add-on for my Larion World Generation mod that limits land
 generation to a circle of a configurable radius. The shape of the
