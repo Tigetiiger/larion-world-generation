@@ -1,36 +1,31 @@
 {
   "schemaVersion": 1,
   "id": "larion-disc-world",
-  "version": "1.7.0",
+  "version": "1.7.0+26.2",
   "name": "Larion: Disc World",
   "description": "Larion add-on to generate worlds with limited size",
   "authors": [
     "Badgerson"
   ],
   "contact": {
-    "homepage": "https://github.com/ViciousBadger/larion-disc-world"
+    "homepage": "https://github.com/Tigetiiger/larion-world-generation/tree/disc-world-26.2",
+    "sources": "https://github.com/Tigetiiger/larion-world-generation/tree/disc-world-26.2"
   },
   "license": "Apache-2.0",
   "icon": "pack.png",
   "environment": "*",
   "depends": {
-    "fabric-api": "*",
-    "fabricloader": ">=0.12.0",
-    "minecraft": [
-      ">=1.20"
-    ],
-    "larion": ">=4.0.0"
+    "fabricloader": ">=0.20.0",
+    "minecraft": "~26.2",
+    "larion": ">=4.3.1"
   },
   "suggests": {
-    "c2me": "*",
-    "noisium": "*",
-    "faster-random": "*",
-    "wwoo": "*"
+    "c2me": "*"
   },
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.source": "https://github.com/ViciousBadger/larion-disc-world"
+        "modmenu.source": "https://github.com/Tigetiiger/larion-world-generation/tree/disc-world-26.2"
       }
     }
   }

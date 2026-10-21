@@ -1,15 +1,7 @@
 {
   "pack": {
-    "pack_format": 48,
-    "supported_formats": [
-      10,
-      12,
-      15,
-      18,
-      26,
-      41,
-      48
-    ],
-    "description": "Larion add-on for a single-continent world"
+    "description": "Larion add-on for a single-continent world",
+    "min_format": 107,
+    "max_format": 107
   }
 }
