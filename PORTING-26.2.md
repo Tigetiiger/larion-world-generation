@@ -68,7 +68,7 @@ Use MultiLoader-Template branch `26.2` as the reference for build files.
 - `gradle.properties`: `minecraft_version=26.2`, `neo_form_version=26.2-2`, `fabric_loader_version=0.20.1`, `minecraft_version_range=[26.2, 26.3)`, Fabric range `~26.2`. Remove Parchment, Forge, NeoForge properties. `version=4.3.1+26.2`.
 - `fabric/build.gradle`: drop `mappings` (26.x ships unobfuscated), `modImplementation` → `implementation`, drop the refmap config.
 - `common/build.gradle`: drop Parchment; mixin compile dep → `net.fabricmc:sponge-mixin:0.17.3+mixin.0.8.7`; drop MixinExtras (unused).
-- Fabric API: Larion's code doesn't use it. Remove it from `depends` so a server needs only Fabric Loader. Keep it in the dev runtime only if a test mod needs it.
+- Fabric API: still required. Larion's code doesn't call it directly, but without it Minecraft's registries are frozen before mods load (crash: "Registry is already frozen") and mod data isn't loaded. An earlier version of this port wrongly dropped the dependency.
 - `fabric.mod.json`: java `>=25`, homepage → fork URL, drop the template's `suggests` placeholder.
 - Mixin configs: `compatibilityLevel` → `JAVA_25`, remove `refmap`.
 - Access widener: header `accessWidener v2 named` → `accessWidener v2 official`. Remove the `makeCodec` and `NOISE_VALUE_CODEC` lines (no longer needed, see Phase 3). Mirror the same removals in `common/.../accesstransformer-common.cfg`.

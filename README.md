@@ -8,7 +8,7 @@
 ## About this port
 
 - **Based on:** upstream `main` (Larion 4.3.1, unreleased upstream), not the 4.3.0 release on Modrinth.
-- **Loader:** Fabric only. Needs Fabric Loader; Fabric API is *not* required.
+- **Loader:** Fabric only. Needs Fabric Loader and Fabric API.
 - **Server-side only** on multiplayer servers: players can join without installing it. Singleplayer needs it installed on the client.
 - **Same terrain as on 1.21.1:** the same seed produces the same landscape as Larion 4.3.1 on 1.21.1 (checked automatically by comparing generated worlds column by column). New vanilla content (sulfur caves, pale garden, new features) is included.
 - **World type:** use **Default**. Large Biomes and Amplified are not supported.
