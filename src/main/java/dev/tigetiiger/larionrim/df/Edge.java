@@ -75,10 +75,14 @@ public final class Edge {
             double shape = lerp(lerp(soft, jagged, jag), ice, frozen);
             double top = SEA + Math.min(RIDGE_MAX, (6 + (RIDGE_MAX - 6) * shape) * hmul);
             if (rel > RIDGE_CENTER) {
-                // Outer side slopes down to the overhang's lip instead of ending in a vertical face.
-                double lip = SEA - 14;
+                // Outer half stays mountain-high and is sliced off at the outer foot: a sheer cliff into the void.
+                // Only a small, rugged dip so the cut edge isn't a flat plateau.
                 double o = clamp01((rel - RIDGE_CENTER) / (OUTER_FOOT - RIDGE_CENTER));
-                top = lip + (top - lip) * (1 - smooth(o));
+                double ps = 1 - 0.25 * o;
+                double softO = ps * ps * (3 - 2 * ps);
+                double jagO = Math.pow(ps, 0.6) * (0.55 + 0.6 * ridged * ridged);
+                double shapeO = lerp(lerp(softO, jagO, jag), ice, frozen);
+                top = SEA + Math.min(RIDGE_MAX, (6 + (RIDGE_MAX - 6) * shapeO) * hmul);
             }
             d = Math.max(d, (top - y) / (frozen > 0.5 ? 2.0 : 8.0));
         }

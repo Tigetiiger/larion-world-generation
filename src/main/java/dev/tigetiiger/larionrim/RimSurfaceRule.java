@@ -37,7 +37,8 @@ public enum RimSurfaceRule implements SurfaceRules.RuleSource {
         return (x, y, z) -> {
             double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
             if (rel < Edge.CUT_START - 20) return null;
-            int above = ctx.stoneDepthAbove, below = ctx.stoneDepthBelow;
+            // Vanilla counts the surface block itself as depth 1; shift so 0 means the exposed block.
+            int above = ctx.stoneDepthAbove - 1, below = ctx.stoneDepthBelow - 1;
             Style st = style(x, z);
             if (rel > Edge.OUTER_FOOT) return island(st, x, y, z, above, below);
             if (y < 40) return underside(st, x, y, z, below);
