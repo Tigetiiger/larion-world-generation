@@ -29,4 +29,25 @@ public abstract class ChunkGeneratorMixin {
             cir.setReturnValue(false);
         }
     }
+
+    /**
+     * /locate, explorer maps and dolphins: skip candidates beyond the wall without touching disk.
+     * Vanilla reads (and creates empty) region files for every candidate, so a locate for a
+     * structure the disc doesn't have would otherwise search outward for hours.
+     */
+    @Inject(method = "getStructureGeneratingAt", at = @At("HEAD"), cancellable = true)
+    private static void larionRim$noLocateInVoid(java.util.Set<net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.Structure>> structures,
+                                                 net.minecraft.world.level.LevelReader level,
+                                                 net.minecraft.world.level.StructureManager sm, boolean createReference,
+                                                 net.minecraft.world.level.levelgen.structure.placement.StructurePlacement config,
+                                                 ChunkPos target,
+                                                 CallbackInfoReturnable<com.mojang.datafixers.util.Pair<net.minecraft.core.BlockPos, net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.Structure>>> cir) {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel sl) || !sl.dimension().equals(Level.OVERWORLD)) return;
+        if (!(sl.getChunkSource().getGenerator() instanceof NoiseBasedChunkGenerator g) || !Edge.isLarionOverworld(g.generatorSettings().value())) return;
+        // Same test as tryGenerateStructure above: nothing can start here, so there is nothing to find.
+        int x = target.getMinBlockX() + 8, z = target.getMinBlockZ() + 8;
+        if (Math.sqrt((double) x * x + (double) z * z) - dev.tigetiiger.larionrim.RimSettings.wallRadius() > Edge.CUT_START) {
+            cir.setReturnValue(null);
+        }
+    }
 }
