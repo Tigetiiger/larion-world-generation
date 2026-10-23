@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "dev.tigetiiger.larionrim.mixin.seedgen",
+  "plugin": "dev.tigetiiger.larionrim.compat.SeedGenMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "SeedColumnSamplerMixin",
+    "SeedWorldGeneratorMixin",
+    "ColumnWriterMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

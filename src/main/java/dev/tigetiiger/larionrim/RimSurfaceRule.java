@@ -47,6 +47,37 @@ public enum RimSurfaceRule implements SurfaceRules.RuleSource {
         };
     }
 
+    /**
+     * Wall/beach material for Distant Horizons LODs at depth {@code above} below the surface (0 = exposed top),
+     * or null where the normal biome surface applies.
+     */
+    public static BlockState lodMaterial(int x, int y, int z, int above) {
+        double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        if (rel < Edge.CUT_START - 20 || rel > Edge.OUTER_FOOT) return null;
+        Style st = style(x, z);
+        if (rel < Edge.RIDGE_CENTER - Edge.RIDGE_HALF + 2 && y <= SEA + 4) return beach(st, y, above);
+        if (y < 40) return null;
+        return wall(st, x, y, z, above, 99);
+    }
+
+    /** Top / body materials of a sky island for LODs (the real island top keeps its biome's surface). */
+    public static BlockState lodIslandTop(int x, int z, boolean desertBiome) {
+        return switch (style(x, z)) {
+            case FROZEN -> Blocks.SNOW_BLOCK.defaultBlockState();
+            case HOT -> (desertBiome ? Blocks.SAND : Blocks.GRASS_BLOCK).defaultBlockState();
+            default -> Blocks.GRASS_BLOCK.defaultBlockState();
+        };
+    }
+
+    public static BlockState lodIslandBody(int x, int y, int z) {
+        return switch (style(x, z)) {
+            case FROZEN -> Blocks.PACKED_ICE.defaultBlockState();
+            case COLD -> Blocks.STONE.defaultBlockState();
+            case TEMPERATE -> Blocks.DIRT.defaultBlockState();
+            case HOT -> band(y);
+        };
+    }
+
     private static BlockState beach(Style st, int y, int above) {
         if (above > 4) return null;
         boolean deep = above >= 2;

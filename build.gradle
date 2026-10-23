@@ -21,6 +21,9 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
     // Optional: only used for the client config screen.
     compileOnly("com.terraformersmc:modmenu:${modmenu_version}") { transitive = false }
+    // Optional: Distant Horizons SeedGen compat (mixins only apply when it is installed).
+    // Not redistributable, so copy the jars into libs/ yourself: seedgen.jar and distanthorizons.jar.
+    compileOnly files('libs/seedgen.jar', 'libs/distanthorizons.jar')
 }
 
 processResources {

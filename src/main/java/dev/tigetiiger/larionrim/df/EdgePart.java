@@ -32,6 +32,7 @@ public record EdgePart(String part, DensityFunction.NoiseHolder noise) implement
     public DensityFunction mapChildren(Visitor visitor) {
         EdgePart e = new EdgePart(part, visitor.visitNoise(noise));
         if (e.noise.noise() != null && part.equals("raise")) {
+            Edge.lodNoise = e.noise;
             IslandField.salt = IslandField.mix(Double.doubleToLongBits(e.noise.getValue(12.34, 56.78, 90.12)) * 31 + 7);
         }
         return e;

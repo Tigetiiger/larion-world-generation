@@ -45,48 +45,85 @@ public final class Edge {
     static double raise(FunctionContext c, DensityFunction.NoiseHolder noise) {
         double rel = rel(c);
         int x = c.blockX(), y = c.blockY(), z = c.blockZ();
-        double R = RimSettings.wallRadius();
         // Solid below a sloping floor (Y ~18 rising to ~40 at the beach) so no cave can connect the ocean to the
         // cut-away underside. Larion's own seabed above it is left alone.
-        double w = smooth(clamp01((rel + 175) / 35.0));
-        double floorY = 18 + 22 * smooth(clamp01((rel + 140) / 50.0)) + 3 * noise.getValue(x * 0.04, 800, z * 0.04);
-        double d = w * (floorY - y) / 6.0;
+        double d = floorWeight(rel) * (floorY(x, z, rel, noise) - y) / 6.0;
+        double frozen = frozen(z);
+        if (rel <= RIDGE_CENTER - RIDGE_HALF) d = Math.max(d, (beachTop(rel, frozen) - y) / 3.0);
+        double top = ridgeTop(x, z, rel, frozen, noise);
+        if (!Double.isNaN(top)) d = Math.max(d, (top - y) / (frozen > 0.5 ? 2.0 : 8.0));
+        return d;
+    }
 
-        double frozen = clamp01((-0.55 - z / R) / 0.05);                          // 1 on the frozen (north) side
+    static double floorWeight(double rel) { return smooth(clamp01((rel + 175) / 35.0)); }
+
+    static double floorY(int x, int z, double rel, DensityFunction.NoiseHolder noise) {
+        return 18 + 22 * smooth(clamp01((rel + 140) / 50.0)) + 3 * noise.getValue(x * 0.04, 800, z * 0.04);
+    }
+
+    /** 1 on the frozen (north) side. */
+    static double frozen(int z) { return clamp01((-0.55 - z / RimSettings.wallRadius()) / 0.05); }
+
+    /** Beach along the inner foot of the ridge, then a steep drop. No beach on the frozen side. */
+    static double beachTop(double rel, double frozen) {
+        double foot = RIDGE_CENTER - RIDGE_HALF;
+        double beachTop = rel >= foot - BEACH_WIDTH
+                ? SEA + 1 + 2.5 * Math.min(1, (rel - (foot - BEACH_WIDTH)) / BEACH_WIDTH)
+                : SEA + 1 - (foot - BEACH_WIDTH - rel) * 2.5;
+        return beachTop - frozen * 60;
+    }
+
+    /** Top of the wall ridge, or NaN outside it. */
+    static double ridgeTop(int x, int z, double rel, double frozen, DensityFunction.NoiseHolder noise) {
+        double p = 1 - Math.abs(rel - RIDGE_CENTER) / RIDGE_HALF;
+        if (!(p > 0)) return Double.NaN;
         double jag = 0.5 + 0.5 * x / Math.max(1, Math.sqrt((double) x * x + (double) z * z)); // east jagged, west soft
         double hmul = Math.max(0.35, Math.min(1, 0.68 + 0.38 * noise.getValue(x * 0.003, 500, z * 0.003)));
+        // Soft: rounded hill. Jagged: sharper profile with ridged spikes. Ice: flat-topped wall with a sheer face.
+        double ridged = 1 - Math.abs(noise.getValue(x * 0.045, 600, z * 0.045));
+        double ice = smooth(clamp01(p / 0.12)) * (0.9 + 0.1 * noise.getValue(x * 0.05, 700, z * 0.05));
+        // Outer half stays mountain-high and is sliced off at the outer foot: a sheer cliff into the void.
+        // Only a small, rugged dip so the cut edge isn't a flat plateau.
+        double ps = rel > RIDGE_CENTER ? 1 - 0.25 * clamp01((rel - RIDGE_CENTER) / (OUTER_FOOT - RIDGE_CENTER)) : p;
+        double soft = ps * ps * (3 - 2 * ps);
+        double jagged = Math.pow(ps, 0.6) * (0.55 + 0.6 * ridged * ridged);
+        double shape = lerp(lerp(soft, jagged, jag), ice, frozen);
+        return SEA + Math.min(RIDGE_MAX, (6 + (RIDGE_MAX - 6) * shape) * hmul);
+    }
 
-        // Beach along the inner foot of the ridge, then a steep drop. No beach on the frozen side.
-        double foot = RIDGE_CENTER - RIDGE_HALF;
-        if (rel <= foot) {
-            double beachTop = rel >= foot - BEACH_WIDTH
-                    ? SEA + 1 + 2.5 * Math.min(1, (rel - (foot - BEACH_WIDTH)) / BEACH_WIDTH)
-                    : SEA + 1 - (foot - BEACH_WIDTH - rel) * 2.5;
-            beachTop -= frozen * 60;
-            d = Math.max(d, (beachTop - y) / 3.0);
-        }
-        double p = 1 - Math.abs(rel - RIDGE_CENTER) / RIDGE_HALF;
-        if (p > 0) {
-            // Soft: rounded hill. Jagged: sharper profile with ridged spikes. Ice: flat-topped wall with a sheer face.
-            double soft = p * p * (3 - 2 * p);
-            double ridged = 1 - Math.abs(noise.getValue(x * 0.045, 600, z * 0.045));
-            double jagged = Math.pow(p, 0.6) * (0.55 + 0.6 * ridged * ridged);
-            double ice = smooth(clamp01(p / 0.12)) * (0.9 + 0.1 * noise.getValue(x * 0.05, 700, z * 0.05));
-            double shape = lerp(lerp(soft, jagged, jag), ice, frozen);
-            double top = SEA + Math.min(RIDGE_MAX, (6 + (RIDGE_MAX - 6) * shape) * hmul);
-            if (rel > RIDGE_CENTER) {
-                // Outer half stays mountain-high and is sliced off at the outer foot: a sheer cliff into the void.
-                // Only a small, rugged dip so the cut edge isn't a flat plateau.
-                double o = clamp01((rel - RIDGE_CENTER) / (OUTER_FOOT - RIDGE_CENTER));
-                double ps = 1 - 0.25 * o;
-                double softO = ps * ps * (3 - 2 * ps);
-                double jagO = Math.pow(ps, 0.6) * (0.55 + 0.6 * ridged * ridged);
-                double shapeO = lerp(lerp(softO, jagO, jag), ice, frozen);
-                top = SEA + Math.min(RIDGE_MAX, (6 + (RIDGE_MAX - 6) * shapeO) * hmul);
-            }
-            d = Math.max(d, (top - y) / (frozen > 0.5 ? 2.0 : 8.0));
-        }
-        return d;
+    /** The edge noise, captured when the density functions are bound to a world (for Distant Horizons LODs). */
+    public static volatile DensityFunction.NoiseHolder lodNoise;
+
+    /**
+     * Highest solid Y of a column inside the wall, given Larion's own surface there (for Distant Horizons LODs,
+     * which only know one surface per column). Matches the real terrain's top up to rounding.
+     */
+    public static int lodSurface(int x, int z, int larionTop) {
+        DensityFunction.NoiseHolder noise = lodNoise;
+        double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        if (rel < AFFECT_START || noise == null) return larionTop;
+        double lower = smooth(clamp01((rel - AFFECT_START) / 125.0));
+        double top = Math.min(larionTop, Math.floor(SEA - 4 + (1 - lower) * 300));
+        if (floorWeight(rel) > 0) top = Math.max(top, Math.ceil(floorY(x, z, rel, noise)) - 1);
+        double frozen = frozen(z);
+        if (rel <= RIDGE_CENTER - RIDGE_HALF) top = Math.max(top, Math.ceil(beachTop(rel, frozen)) - 1);
+        double ridge = ridgeTop(x, z, rel, frozen, noise);
+        if (!Double.isNaN(ridge)) top = Math.max(top, Math.ceil(ridge) - 1);
+        return (int) top;
+    }
+
+    /** Island beyond the wall at this column for LODs: {bottomY, topY}, or null for void. */
+    public static int[] lodIsland(int x, int z) {
+        IslandField.Island is = IslandField.at(x, z);
+        if (is == null) return null;
+        double dx = x - is.x(), dz = z - is.z();
+        double q = Math.sqrt(dx * dx + dz * dz) / is.edgeRadius(Math.atan2(dz, dx));
+        if (q >= 1) return null;
+        DensityFunction.NoiseHolder noise = lodNoise;
+        double n = noise == null ? 0 : noise.getValue(x * 0.08, 300, z * 0.08);
+        int top = (int) Math.floor(is.topY() + 4 * (1 - q * q) + 2 * n);
+        int bottom = (int) Math.ceil(is.topY() - 2 - is.depth() * Math.pow(1 - q, 1.6));
+        return bottom < top ? new int[]{bottom, top} : null;
     }
 
     /** Rim underside: below this height everything is cut away, giving an overhang into the void. */

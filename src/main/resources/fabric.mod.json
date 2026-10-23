@@ -21,7 +21,8 @@
     ]
   },
   "mixins": [
-    "larion_rim.mixins.json"
+    "larion_rim.mixins.json",
+    "larion_rim.seedgen.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.20.0",
