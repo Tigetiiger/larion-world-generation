@@ -26,6 +26,8 @@ public final class RimSettings {
         public int islandBandMax = 2_000;
         /** One island per square cell of this size. */
         public int islandSpacing = 1_000;
+        /** Outline style; see {@link RimShape}. Worlds saved before this field existed keep the exact circle. */
+        public int edgeShape = RimShape.WOBBLY;
 
         Values sanitized() {
             Values v = new Values();
@@ -34,6 +36,7 @@ public final class RimSettings {
             v.islandBandMin = clamp(islandBandMin, 100, 10_000);
             v.islandBandMax = clamp(islandBandMax, v.islandBandMin + 200, 20_000);
             v.islandSpacing = clamp(islandSpacing, 400, 10_000);
+            v.edgeShape = clamp(edgeShape, RimShape.CIRCLE, RimShape.WOBBLY);
             return v;
         }
     }
@@ -71,7 +74,7 @@ public final class RimSettings {
             write(f, v);
             LarionRim.LOG.info("Larion Rim: new world, locking diameter {} (saved to {})", v.diameter, f);
         } else {
-            LarionRim.LOG.info("Larion Rim: world diameter {}", v.diameter);
+            LarionRim.LOG.info("Larion Rim: world diameter {}, edge shape {}", v.diameter, v.edgeShape);
         }
         active = v.sanitized();
     }
@@ -79,7 +82,11 @@ public final class RimSettings {
     private static Values read(Path f) {
         if (!Files.isRegularFile(f)) return null;
         try {
-            return GSON.fromJson(Files.readString(f), Values.class);
+            String json = Files.readString(f);
+            Values v = GSON.fromJson(json, Values.class);
+            // A world file from before outlines existed: keep its exact circle so new chunks match old ones.
+            if (!f.equals(configFile()) && !json.contains("\"edgeShape\"")) v.edgeShape = RimShape.CIRCLE;
+            return v;
         } catch (Exception e) {
             LarionRim.LOG.error("Larion Rim: could not read {}, using defaults", f, e);
             return new Values();

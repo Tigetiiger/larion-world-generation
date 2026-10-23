@@ -17,6 +17,6 @@ public abstract class LakeFeatureMixin {
     private void larionRim$noLakesAtEdge(FeaturePlaceContext<LakeFeature.Configuration> ctx, CallbackInfoReturnable<Boolean> cir) {
         if (!(ctx.chunkGenerator() instanceof NoiseBasedChunkGenerator g) || !dev.tigetiiger.larionrim.df.Edge.isLarionOverworld(g.generatorSettings().value())) return;
         BlockPos o = ctx.origin();
-        if (Math.sqrt((double) o.getX() * o.getX() + (double) o.getZ() * o.getZ()) - RimSettings.wallRadius() > -300) cir.setReturnValue(false);
+        if (dev.tigetiiger.larionrim.RimShape.rel(o.getX(), o.getZ()) > -300) cir.setReturnValue(false);
     }
 }

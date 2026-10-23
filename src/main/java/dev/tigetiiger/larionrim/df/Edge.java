@@ -30,7 +30,7 @@ public final class Edge {
     public static final double OUTER_FOOT = RIDGE_CENTER + RIDGE_HALF;
 
     public static double rel(FunctionContext c) {
-        return radius(c) - RimSettings.wallRadius();
+        return dev.tigetiiger.larionrim.RimShape.rel(c.blockX(), c.blockZ());
     }
 
     /** Lowers Larion's own land toward sea level over the last ~300 blocks, so only the ridge forms the skyline. */
@@ -100,7 +100,7 @@ public final class Edge {
      */
     public static int lodSurface(int x, int z, int larionTop) {
         DensityFunction.NoiseHolder noise = lodNoise;
-        double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        double rel = dev.tigetiiger.larionrim.RimShape.rel(x, z);
         if (rel < AFFECT_START || noise == null) return larionTop;
         double lower = smooth(clamp01((rel - AFFECT_START) / 125.0));
         double top = Math.min(larionTop, Math.floor(SEA - 4 + (1 - lower) * 300));
@@ -161,7 +161,7 @@ public final class Edge {
 
     /** True if nothing but void and sky islands exists at this column. */
     public static boolean beyondWall(int x, int z) {
-        return Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius() > OUTER_FOOT;
+        return dev.tigetiiger.larionrim.RimShape.rel(x, z) > OUTER_FOOT;
     }
 
     /** The addon only touches Larion's overworld (min Y -128, height 640). */

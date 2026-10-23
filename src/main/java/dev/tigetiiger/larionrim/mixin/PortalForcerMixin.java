@@ -29,7 +29,7 @@ public abstract class PortalForcerMixin {
         if (!level.dimension().equals(Level.OVERWORLD)) return pos;
         if (!(level.getChunkSource().getGenerator() instanceof NoiseBasedChunkGenerator g) || !Edge.isLarionOverworld(g.generatorSettings().value())) return pos;
         double r = Math.sqrt((double) pos.getX() * pos.getX() + (double) pos.getZ() * pos.getZ());
-        double R = RimSettings.wallRadius();
+        double R = RimSettings.wallRadius() + dev.tigetiiger.larionrim.RimShape.wallOffset(pos.getX(), pos.getZ());
         if (r - R < -RimSettings.active().oceanRingWidth) return pos;
         double target = R + Edge.RIDGE_CENTER - Edge.RIDGE_HALF - Edge.BEACH_WIDTH / 2; // middle of the beach
         BlockPos moved = new BlockPos((int) Math.round(pos.getX() * target / r), 70, (int) Math.round(pos.getZ() * target / r));

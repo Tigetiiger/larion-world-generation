@@ -29,7 +29,7 @@ public final class SeedGenEdge {
     }
 
     public static double rel(int x, int z) {
-        return Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        return dev.tigetiiger.larionrim.RimShape.rel(x, z);
     }
 
     private SeedGenEdge() {}

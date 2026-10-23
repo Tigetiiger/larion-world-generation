@@ -19,7 +19,7 @@ public abstract class SpringFeatureMixin {
     private void larionRim$noSpringsAtEdge(FeaturePlaceContext<SpringConfiguration> ctx, CallbackInfoReturnable<Boolean> cir) {
         if (!(ctx.chunkGenerator() instanceof NoiseBasedChunkGenerator g) || !Edge.isLarionOverworld(g.generatorSettings().value())) return;
         BlockPos o = ctx.origin();
-        if (Math.sqrt((double) o.getX() * o.getX() + (double) o.getZ() * o.getZ()) - RimSettings.wallRadius() > Edge.CUT_START - 60) {
+        if (dev.tigetiiger.larionrim.RimShape.rel(o.getX(), o.getZ()) > Edge.CUT_START - 60) {
             cir.setReturnValue(false);
         }
     }

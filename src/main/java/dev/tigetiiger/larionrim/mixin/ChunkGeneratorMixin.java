@@ -25,7 +25,7 @@ public abstract class ChunkGeneratorMixin {
         if (!((Object) this instanceof NoiseBasedChunkGenerator g) || !Edge.isLarionOverworld(g.generatorSettings().value())) return;
         // Use the chunk corner closest to the centre, so structures touching the wall area are blocked too.
         int x = pos.getMinBlockX() + 8, z = pos.getMinBlockZ() + 8;
-        if (Math.sqrt((double) x * x + (double) z * z) - dev.tigetiiger.larionrim.RimSettings.wallRadius() > Edge.CUT_START) {
+        if (dev.tigetiiger.larionrim.RimShape.rel(x, z) > Edge.CUT_START) {
             cir.setReturnValue(false);
         }
     }
@@ -46,7 +46,7 @@ public abstract class ChunkGeneratorMixin {
         if (!(sl.getChunkSource().getGenerator() instanceof NoiseBasedChunkGenerator g) || !Edge.isLarionOverworld(g.generatorSettings().value())) return;
         // Same test as tryGenerateStructure above: nothing can start here, so there is nothing to find.
         int x = target.getMinBlockX() + 8, z = target.getMinBlockZ() + 8;
-        if (Math.sqrt((double) x * x + (double) z * z) - dev.tigetiiger.larionrim.RimSettings.wallRadius() > Edge.CUT_START) {
+        if (dev.tigetiiger.larionrim.RimShape.rel(x, z) > Edge.CUT_START) {
             cir.setReturnValue(null);
         }
     }

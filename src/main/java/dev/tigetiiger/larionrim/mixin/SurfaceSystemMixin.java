@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SurfaceSystemMixin {
     @org.spongepowered.asm.mixin.Unique
     private static boolean larionRim$nearEdge(int x, int z) {
-        return Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius() > Edge.CUT_START - 20;
+        return dev.tigetiiger.larionrim.RimShape.rel(x, z) > Edge.CUT_START - 20;
     }
 
     @Inject(method = "frozenOceanExtension", at = @At("HEAD"), cancellable = true)

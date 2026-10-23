@@ -32,7 +32,7 @@ public final class IslandField {
         double ix = cx * (double) s + margin + rnd(cx, cz, 1) * (s - 2 * margin);
         double iz = cz * (double) s + margin + rnd(cx, cz, 2) * (s - 2 * margin);
         double radius = 25 + rnd(cx, cz, 3) * 50;
-        double dist = Math.sqrt(ix * ix + iz * iz) - RimSettings.wallRadius();
+        double dist = RimShape.rel(ix, iz);
         if (dist < v.islandBandMin + radius || dist > v.islandBandMax) return null;
         double topY = 80 + rnd(cx, cz, 4) * 120;
         double depth = radius * (1.0 + rnd(cx, cz, 5) * 0.9);

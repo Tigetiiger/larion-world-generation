@@ -18,10 +18,18 @@ public record RingBlend(double from, double to, String relativeTo) implements De
 
     @Override
     public double compute(FunctionContext c) {
-        double base = RimSettings.wallRadius();
-        if (relativeTo.equals("ring")) base -= RimSettings.active().oceanRingWidth;
-        double r = Math.sqrt((double) c.blockX() * c.blockX() + (double) c.blockZ() * c.blockZ());
-        double t = (r - (base + from)) / (to - from);
+        double x = c.blockX(), z = c.blockZ();
+        double d;
+        if (relativeTo.equals("ring")) {
+            // distance to the mainland coast line: ring's inner edge plus its own drift (only looked up near it)
+            d = Math.sqrt(x * x + z * z) - (RimSettings.wallRadius() - RimSettings.active().oceanRingWidth);
+            if (Math.abs(d) < dev.tigetiiger.larionrim.RimShape.maxCoastOffset() + 400) d -= dev.tigetiiger.larionrim.RimShape.coastOffset(x, z);
+        } else {
+            d = dev.tigetiiger.larionrim.RimShape.rel(x, z);
+        }
+        double f = from, e = to;
+        if (relativeTo.equals("ring") && !dev.tigetiiger.larionrim.RimShape.wobbly()) { f = -300; e = 0; } // circle worlds: original coast push
+        double t = (d - f) / (e - f);
         if (t <= 0) return 0;
         if (t >= 1) return 1;
         return t * t * (3 - 2 * t);

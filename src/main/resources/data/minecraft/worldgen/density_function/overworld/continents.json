@@ -12,8 +12,8 @@
           "type": "minecraft:mul",
           "argument1": {
             "type": "larion_rim:ring_blend",
-            "from": -300,
-            "to": 0,
+            "from": -350,
+            "to": 250,
             "relative_to": "ring"
           },
           "argument2": {
@@ -47,8 +47,8 @@
                 "type": "minecraft:mul",
                 "argument1": {
                   "type": "larion_rim:ring_blend",
-                  "from": -300,
-                  "to": 0,
+                  "from": -350,
+                  "to": 250,
                   "relative_to": "ring"
                 },
                 "argument2": {

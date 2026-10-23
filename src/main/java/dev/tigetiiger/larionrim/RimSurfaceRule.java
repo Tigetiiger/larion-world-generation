@@ -35,7 +35,7 @@ public enum RimSurfaceRule implements SurfaceRules.RuleSource {
     @Override
     public SurfaceRules.SurfaceRule apply(SurfaceRules.Context ctx) {
         return (x, y, z) -> {
-            double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+            double rel = RimShape.rel(x, z);
             if (rel < Edge.CUT_START - 20) return null;
             // Vanilla counts the surface block itself as depth 1; shift so 0 means the exposed block.
             int above = ctx.stoneDepthAbove - 1, below = ctx.stoneDepthBelow - 1;
@@ -52,7 +52,7 @@ public enum RimSurfaceRule implements SurfaceRules.RuleSource {
      * or null where the normal biome surface applies.
      */
     public static BlockState lodMaterial(int x, int y, int z, int above) {
-        double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        double rel = RimShape.rel(x, z);
         if (rel < Edge.CUT_START - 20 || rel > Edge.OUTER_FOOT) return null;
         Style st = style(x, z);
         if (rel < Edge.RIDGE_CENTER - Edge.RIDGE_HALF + 2 && y <= SEA + 4) return beach(st, y, above);

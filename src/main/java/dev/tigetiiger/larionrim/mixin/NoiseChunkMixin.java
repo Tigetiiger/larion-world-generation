@@ -42,6 +42,6 @@ public abstract class NoiseChunkMixin {
     private void larionRim$voidSurface(int x, int z, CallbackInfoReturnable<Integer> cir) {
         // Beyond the wall: island tops count as "surface". On the ridge: lets the surface pass style the whole
         // wall down to the overhang (it normally only works near the expected surface).
-        if (larionRim$active && Math.sqrt((double) x * x + (double) z * z) - dev.tigetiiger.larionrim.RimSettings.wallRadius() > Edge.RIDGE_CENTER - Edge.RIDGE_HALF) cir.setReturnValue(-128);
+        if (larionRim$active && dev.tigetiiger.larionrim.RimShape.rel(x, z) > Edge.RIDGE_CENTER - Edge.RIDGE_HALF) cir.setReturnValue(-128);
     }
 }

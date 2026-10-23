@@ -19,11 +19,11 @@ public final class RimDecorator {
         int x0 = chunk.getPos().getMinBlockX(), z0 = chunk.getPos().getMinBlockZ();
         double R = RimSettings.wallRadius();
         double nearest = Math.sqrt(Math.pow(Math.max(Math.abs(x0 + 8) - 12, 0), 2) + Math.pow(Math.max(Math.abs(z0 + 8) - 12, 0), 2));
-        if (nearest - R < Edge.CUT_START - 30) return; // nothing to do this far inside
+        if (nearest - R - RimShape.maxWallOffset() < Edge.CUT_START - 30) return; // nothing to do this far inside
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int dx = 0; dx < 16; dx++) for (int dz = 0; dz < 16; dz++) {
             int x = x0 + dx, z = z0 + dz;
-            double rel = Math.sqrt((double) x * x + (double) z * z) - R;
+            double rel = RimShape.rel(x, z);
             if (rel < Edge.CUT_START) continue;
             RimSurfaceRule.Style st = RimSurfaceRule.style(x, z);
             boolean solidAbove = false;

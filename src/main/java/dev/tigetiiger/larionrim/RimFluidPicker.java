@@ -12,7 +12,7 @@ public record RimFluidPicker(Aquifer.FluidPicker original) implements Aquifer.Fl
     /** True where no fluid may exist: the void, and a margin under the rim's overhang (aquifers sample
      *  fluid levels up to ~24 blocks away). Everything else near the wall is solid rock below Edge's floor. */
     public static boolean dry(int x, int y, int z) {
-        double rel = Math.sqrt((double) x * x + (double) z * z) - RimSettings.wallRadius();
+        double rel = dev.tigetiiger.larionrim.RimShape.rel(x, z);
         if (rel > Edge.RIDGE_CENTER) return true; // outer half of the ridge and beyond: never ocean
         return rel > Edge.CUT_START && y < Edge.cutHeight(rel + 32) + 8;
     }

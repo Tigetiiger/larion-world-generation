@@ -55,3 +55,15 @@ Branch `rimworld-26.2` in `Tigetiiger/larion-world-generation`, containing only 
 - Wall and islands are new terrain design; expect a couple of rounds of in-game tuning (screenshots from a test client).
 - Copying Larion's `final_density` ties the addon to the port version.
 - Name "Rimworld" collides with an existing game title; fine for private use, rename before any public release.
+
+## Edge shape v2: round but not compass-perfect (grilling, 2026-10-23)
+
+| Topic | Decision |
+|---|---|
+| Wall line | Wobbles in/out around the circle by ~1.5% of the radius (±75 at diameter 10,000), clamped ±30…±300. |
+| Bend pattern | Mix: long swells every ~600–1,000 blocks plus small 10–20 block kinks every ~100. Scales with diameter. Pattern from the world seed. |
+| Follows the wall | Beach, ridge, cliff, overhang, void, lowering zone and the sky-island band all move with the wobbly line. Islands stay ≥200 beyond it. |
+| Mainland | Pure Larion generation inside. |
+| Ocean ring | Roughly 1,000 wide (≈800–1,200). Coast push starts at its own independent wobble line (~±200 at 10k) and fades in over ~600 blocks, so Larion's land decides peninsulas and bays. |
+| Old worlds | Worlds whose saved larion_rim.json lacks the new field keep the exact circle (no seams). Only new worlds get the new shape. |
+| Review | Preview page: whole-disc top-down map (from SeedGen LODs at 16 blocks/px) plus real-chunk close-ups at 3–4 edge spots; install after approval. |

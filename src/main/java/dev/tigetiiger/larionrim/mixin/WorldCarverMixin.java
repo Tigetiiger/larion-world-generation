@@ -20,7 +20,7 @@ public abstract class WorldCarverMixin {
                                          net.minecraft.world.level.chunk.CarvingMask mask, WorldCarver.CarveSkipChecker skip,
                                          CallbackInfoReturnable<Boolean> cir) {
         if (ctx.getMinGenY() != -128 || ctx.getGenDepth() != 640) return; // Larion overworld only
-        double rel = Math.sqrt(x * x + z * z) - RimSettings.wallRadius();
+        double rel = dev.tigetiiger.larionrim.RimShape.rel(x, z);
         if (rel > -170 - hRadius) cir.setReturnValue(false);
     }
 }
